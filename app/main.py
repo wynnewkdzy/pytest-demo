@@ -6,7 +6,7 @@
 from datetime import datetime
 
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
+from pydantic import AwareDatetime, BaseModel, Field
 
 VERSION = "v0.1.0"
 
@@ -15,9 +15,9 @@ app = FastAPI(title="events-api")
 
 class Event(BaseModel):
     event_id: str = Field(pattern=r"^[A-Za-z0-9_-]{3,64}$")
-    site: str = Field(min_length=1)
-    camera_id: str = Field(min_length=1)
-    event_time: datetime
+    site: str = Field(min_length=1, pattern=r"\S")
+    camera_id: str = Field(pattern=r"^[A-Za-z0-9_-]{1,32}$")
+    event_time: AwareDatetime
     kind: str = "fall"
     score: float = Field(ge=0, le=1)
 
